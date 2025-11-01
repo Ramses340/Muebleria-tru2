@@ -1,0 +1,120 @@
+El local http://localhost:3000
+
+
+en post
+http://localhost:3000/api/auth/register
+en raw
+
+esto es el usuario del admin y la password es para poder ver los registros 
+{
+  "username": "admin",
+  "password": "1234"
+}
+Se esperara ejemplo un
+
+{
+  "id": 1,
+  "username": "admin"
+}
+
+
+Inicio sesión token JWK
+en post
+http://localhost:3000/api/auth/login
+vuelves a poner el usuario admin pero esta vez para recibir un token JWK
+
+{
+  "username": "admin",
+  "password": "1234"
+}
+
+se espera un token
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+
+en GET 
+http://localhost:3000/api/productos
+en headers authorization bear token
+se coloca el token 
+Bearer <Token>
+Y si no no dejara ver los productos y si esta el token recibirá ejemplo un 
+
+[
+  {
+    "id": 1,
+    "nombre": "Silla de madera",
+    "precio": "250.00",
+    "stock": 10
+  },
+  {
+    "id": 2,
+    "nombre": "Mesa de comedor",
+    "precio": "1200.00",
+    "stock": 5
+  }
+]
+
+en crear se usa en GET
+http://localhost:3000/api/productos igual
+con el token otra vez en authorization
+en raw se pondrá ejemplo
+{
+  "nombre": "Lámpara de escritorio",
+  "precio": 450,
+  "stock": 8
+}
+Dara respuesta un 
+{
+  "id": 4,
+  "nombre": "Lámpara de escritorio",
+  "precio": "450.00",
+  "stock": 8
+}
+
+Actualizar un producto
+método put la url es http://localhost:3000/api/productos/4
+Igual se usara el token
+y igual que crear en este en raw se coloca un 
+
+{
+  "nombre": "Lámpara moderna",
+  "precio": 500,
+  "stock": 10
+}
+Y esperara un 
+
+{
+  "message": "Producto actualizado correctamente"
+}
+en eliminar es método DELETE 
+con url http://localhost:3000/api/productos/4
+igual con el token y listo ya se eliminara y soltara un
+{
+  "message": "Producto eliminado correctamente"
+}
+
+en consultar producto es método GET
+la url http://localhost:3000/api/productos/1
+igual usa token
+Y demuestra el producto
+
+{
+  "id": 1,
+  "nombre": "Silla de madera",
+  "precio": "250.00",
+  "stock": 10
+}
+
+| # | Acción                         | Método | URL                  | Token requerido |
+| - | ------------------------------ | ------ | -------------------- | --------------- |
+| 1 | Registrar usuario              | POST   | `/api/auth/register` | NO               |
+| 2 | Iniciar sesión (obtener token) | POST   | `/api/auth/login`    | NO               |
+| 3 | Listar productos               | GET    | `/api/productos`     | SI               |
+| 4 | Crear producto                 | POST   | `/api/productos`     | SI               |
+| 5 | Actualizar producto            | PUT    | `/api/productos/:id` | SI               |
+| 6 | Eliminar producto              | DELETE | `/api/productos/:id` | SI               |
+| 7 | Obtener producto individual    | GET    | `/api/productos/:id` | SI               |
+
+
