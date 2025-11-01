@@ -1,10 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 
-const detalleRoutes = require('./routes/detalleVenta.routes');
+const detalleRoutes = require('./src/routes/detalleVenta.routes');
 // nuevas routes
-const authRoutes = require('./routes/auth.routes');
-const productosRoutes = require('./routes/productos.routes');
+const authRoutes = require('./src/routes/auth.routes');
+const productosRoutes = require('./src/routes/productos.routes');
 
 const app = express();
 app.use(cors());
@@ -21,7 +21,7 @@ app.use((req,res,next)=>{
 });
 
 // error handler
-const errorHandler = require('./middlewares/error.middleware');
+const errorHandler = require('./src/middlewares/error.middleware');
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;

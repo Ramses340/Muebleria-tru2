@@ -47,3 +47,25 @@ VALUES
 ('Silla de madera', 250.00, 10),
 ('Mesa de comedor', 1200.00, 5),
 ('Sofá de 3 plazas', 3500.00, 2);
+
+
+-- Ejemplo para todos los campos de la base de datos -- 
+
+INSERT INTO usuarios (nombre, email, password) VALUES
+('Administrador', 'admin@muebleria.com', 'admin123'),
+('Empleado 1', 'empleado1@muebleria.com', 'empleado123');
+INSERT INTO clientes (nombre, telefono, direccion) VALUES
+('Juan Pérez', '6441234567', 'Av. Tecnológico 123'),
+('María López', '6447654321', 'Calle Juárez 45'),
+('Carlos Ruiz', '6449998888', 'Col. Centro #12');
+INSERT INTO productos (nombre, descripcion, precio, stock) VALUES
+('Silla de Madera', 'Silla resistente hecha de pino natural', 950.00, 10),
+('Mesa Redonda', 'Mesa de comedor para 4 personas', 2500.00, 5),
+('Sofá 3 plazas', 'Sofá tapizado color gris', 4800.00, 3),
+('Escritorio Moderno', 'Ideal para oficina o estudio', 1900.00, 7),
+('Librero Compacto', 'Mueble de 5 niveles', 1200.00, 8);
+INSERT INTO ventas (cliente_id, total) VALUES
+(1, 3450.00);
+INSERT INTO detalle_venta (venta_id, producto_id, cantidad, subtotal) VALUES
+(1, 1, 2, 1900.00),
+(1, 2, 1, 2500.00);
