@@ -1,0 +1,16 @@
+{
+  "name": "muebleria-fixed",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "jest --runInBand",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-validator": "^7.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.15.3"
+  }
+}

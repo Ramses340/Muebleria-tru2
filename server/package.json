@@ -1,0 +1,12 @@
+{
+  "name": "muebleria",
+  "version": "1.0.0",
+  "description": "Capa de acceso a datos para proyecto de mueblería",
+  "main": "test.js",
+  "scripts": {
+    "start": "node test.js"
+  },
+  "dependencies": {
+    "mysql2": "^3.3.3"
+  }
+}
