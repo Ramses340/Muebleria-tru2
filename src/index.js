@@ -4,6 +4,9 @@ const path = require('path');
 const cors = require('cors');
 
 const authRoutes = require('./routes/auth.routes');
+const productosRoutes = require('./routes/productos.routes');
+const detalleVentaRoutes = require('./routes/detalleVenta.routes');
+const errorHandler = require('./middlewares/error.middleware');
 
 const app = express();
 
@@ -18,11 +21,21 @@ app.use(express.static(publicPath));
 
 /* Rutas Backend */
 app.use('/api/auth', authRoutes);
+app.use('/api/productos', productosRoutes);
+app.use('/api/detalleVenta', detalleVentaRoutes);
 
 /* Página principal */
 app.get('/', (req, res) => {
   res.sendFile(path.join(publicPath, 'login.html'));
 });
+
+/* 404 */
+app.use((req, res) => {
+  res.status(404).json({ message: 'Recurso no encontrado' });
+});
+
+/* Error handler */
+app.use(errorHandler);
 
 /* Iniciar servidor */
 const PORT = process.env.PORT || 3000;

@@ -63,7 +63,7 @@ CREATE TABLE detalle_venta (
     venta_id INT NOT NULL,
     producto_id INT NOT NULL,
     cantidad INT NOT NULL DEFAULT 1,
-    subtotal DECIMAL(10,2) NOT NULL CHECK (subtotal >= 0),
+    precio_unitario DECIMAL(10,2) NOT NULL CHECK (precio_unitario >= 0),
     FOREIGN KEY (venta_id) REFERENCES ventas(id) ON DELETE CASCADE,
     FOREIGN KEY (producto_id) REFERENCES productos(id) ON DELETE CASCADE
 );
@@ -96,6 +96,6 @@ INSERT INTO ventas (usuario_id, cliente_id, total) VALUES
 (1, 1, 6900.00);
 
 -- Detalle de venta
-INSERT INTO detalle_venta (venta_id, producto_id, cantidad, subtotal) VALUES
-(1, 1, 2, 1900.00),
+INSERT INTO detalle_venta (venta_id, producto_id, cantidad, precio_unitario) VALUES
+(1, 1, 2, 950.00),
 (1, 2, 1, 2500.00);

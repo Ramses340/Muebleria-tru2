@@ -10,6 +10,15 @@ exports.create = async (req, res, next) => {
   }
 };
 
+exports.getAll = async (req, res, next) => {
+  try {
+    const detalles = await detalleDao.findAll();
+    res.status(200).json(detalles);
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.getByVenta = async (req, res, next) => {
   try {
     const venta_id = parseInt(req.params.venta_id, 10);

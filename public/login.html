@@ -98,7 +98,12 @@
         const data = await res.json();
 
         if (!res.ok) {
-          Swal.fire("Error", data.message || "Error en el login", "error");
+          // Manejar errores de validación (express-validator)
+          let errorMsg = data.message || "Error en el login";
+          if (data.errors && Array.isArray(data.errors)) {
+            errorMsg = data.errors.map(e => e.msg).join(", ");
+          }
+          Swal.fire("Error", errorMsg, "error");
         } else {
           Swal.fire({
             icon: "success",
@@ -107,7 +112,7 @@
             confirmButtonColor: "#0d6efd"
           }).then(() => {
             localStorage.setItem("token", data.token);
-            // window.location.href = "/dashboard.html";
+            window.location.href = "/dashboard.html";
           });
         }
 

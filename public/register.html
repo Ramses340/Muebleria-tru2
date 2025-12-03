@@ -152,7 +152,12 @@ document.getElementById("formRegistro").addEventListener("submit", async (e) => 
                 window.location.href = "/login.html";
             });
         } else {
-            Swal.fire("Error", data.msg || "No se pudo registrar", "error");
+          // Manejar errores de validación (express-validator)
+          let errorMsg = data.message || "No se pudo registrar";
+          if (data.errors && Array.isArray(data.errors)) {
+            errorMsg = data.errors.map(e => e.msg).join(", ");
+          }
+          Swal.fire("Error", errorMsg, "error");
         }
 
     } catch (error) {

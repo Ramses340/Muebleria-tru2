@@ -19,6 +19,11 @@ class DetalleVentaDAO {
     }
   }
 
+  async findAll() {
+    const [rows] = await db.query(`SELECT * FROM ${this.table}`);
+    return rows;
+  }
+
   async findById(id) {
     const [rows] = await db.query(`SELECT * FROM ${this.table} WHERE id = ?`, [id]);
     return rows[0] || null;
