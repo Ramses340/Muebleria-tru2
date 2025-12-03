@@ -138,49 +138,70 @@
         <div id="detalleVenta" class="section">
           <div class="card">
             <div class="card-header bg-info text-white">
-              <h5 class="mb-0"><i class="bi bi-receipt"></i> Gestionar Detalles de Venta</h5>
+              <h5 class="mb-0"><i class="bi bi-receipt"></i> Crear Detalle de Venta (Ticket)</h5>
             </div>
             <div class="card-body">
-              <!-- Formulario crear/editar -->
-              <div class="row mb-3">
-                <div class="col-md-2">
-                  <label class="form-label">Venta ID</label>
+              <!-- Formulario crear detalle de venta -->
+              <div class="row mb-4">
+                <div class="col-md-3">
+                  <label class="form-label"><strong>Venta ID</strong></label>
                   <input type="number" id="detVentaId" class="form-control" placeholder="Ej: 1" min="1">
                 </div>
-                <div class="col-md-2">
-                  <label class="form-label">Producto ID</label>
-                  <input type="number" id="detProductoId" class="form-control" placeholder="Ej: 1" min="1">
+                <div class="col-md-4">
+                  <label class="form-label"><strong>Seleccionar Producto</strong></label>
+                  <select id="detProductoSelect" class="form-select" onchange="cargarDetallesProducto()">
+                    <option value="">-- Selecciona un producto --</option>
+                  </select>
                 </div>
                 <div class="col-md-2">
-                  <label class="form-label">Cantidad</label>
-                  <input type="number" id="detCantidad" class="form-control" placeholder="Ej: 2" min="1">
+                  <label class="form-label"><strong>Cantidad</strong></label>
+                  <input type="number" id="detCantidad" class="form-control" placeholder="Ej: 2" min="1" value="1" onchange="calcularSubtotal()">
                 </div>
-                <div class="col-md-2">
-                  <label class="form-label">Precio Unitario</label>
-                  <input type="number" id="detPrecioUnitario" class="form-control" placeholder="Ej: 150.50" step="0.01">
-                </div>
-                <div class="col-md-4 d-flex align-items-end">
+                <div class="col-md-3 d-flex align-items-end">
                   <button class="btn btn-success w-100" onclick="guardarDetalleVenta()">
-                    <i class="bi bi-plus-circle"></i> Guardar
+                    <i class="bi bi-plus-circle"></i> Agregar a Venta
                   </button>
                 </div>
               </div>
 
-              <!-- Tabla de detalles de venta -->
+              <!-- Información del producto seleccionado -->
+              <div id="productoInfoDiv" class="alert alert-light border mb-4" style="display: none;">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6 class="text-primary"><strong>Producto:</strong> <span id="infoProdNombre"></span></h6>
+                    <p class="mb-2"><strong>Descripción:</strong> <span id="infoProdDesc" class="text-muted"></span></p>
+                  </div>
+                  <div class="col-md-6">
+                    <p class="mb-2"><strong>Precio Unitario:</strong> $<span id="infoProdPrecio" class="text-success fw-bold"></span></p>
+                    <p class="mb-2"><strong>Stock Disponible:</strong> <span id="infoProdStock" class="badge bg-secondary"></span></p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6 class="text-info">Subtotal: $<span id="infoProdSubtotal" class="fw-bold">0.00</span></h6>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tabla de detalles de venta (como recibo) -->
+              <h5 class="mt-5 mb-3"><i class="bi bi-receipt-cutoff"></i> Detalles de Ventas Registrados</h5>
               <div class="table-responsive">
                 <table class="table table-hover table-bordered">
                   <thead class="table-dark">
                     <tr>
                       <th>ID</th>
                       <th>Venta ID</th>
-                      <th>Producto ID</th>
+                      <th>Producto</th>
+                      <th>Descripción</th>
                       <th>Cantidad</th>
-                      <th>Precio Unitario</th>
+                      <th>Precio Unit.</th>
+                      <th>Subtotal</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
                   <tbody id="detalleVentaTable">
-                    <tr><td colspan="6" class="text-center text-muted">Cargando...</td></tr>
+                    <tr><td colspan="8" class="text-center text-muted">Cargando...</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -272,6 +293,7 @@
       
       // Cargar datos iniciales
       cargarProductos();
+      cargarProductosEnSelect();
       cargarDetallesVenta();
     });
 
@@ -434,9 +456,67 @@
 
     // ============ DETALLES DE VENTA ============
 
+    let productosDisponibles = [];
+
+    async function cargarProductosEnSelect() {
+      try {
+        const res = await fetch(`${API_URL}/productos`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!res.ok) throw new Error('Error al cargar productos');
+        
+        productosDisponibles = await res.json();
+        const select = document.getElementById('detProductoSelect');
+        select.innerHTML = '<option value="">-- Selecciona un producto --</option>';
+        
+        productosDisponibles.forEach(p => {
+          const option = document.createElement('option');
+          option.value = p.id;
+          option.textContent = `${p.nombre} - $${parseFloat(p.precio).toFixed(2)}`;
+          select.appendChild(option);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function cargarDetallesProducto() {
+      const productoId = parseInt(document.getElementById('detProductoSelect').value);
+      const infoDiv = document.getElementById('productoInfoDiv');
+      
+      if (!productoId) {
+        infoDiv.style.display = 'none';
+        return;
+      }
+
+      const producto = productosDisponibles.find(p => p.id === productoId);
+      if (!producto) return;
+
+      document.getElementById('infoProdNombre').textContent = producto.nombre;
+      document.getElementById('infoProdDesc').textContent = producto.descripcion || 'Sin descripción';
+      document.getElementById('infoProdPrecio').textContent = parseFloat(producto.precio).toFixed(2);
+      document.getElementById('infoProdStock').textContent = producto.stock;
+      
+      infoDiv.style.display = 'block';
+      calcularSubtotal();
+    }
+
+    function calcularSubtotal() {
+      const productoId = parseInt(document.getElementById('detProductoSelect').value);
+      const cantidad = parseInt(document.getElementById('detCantidad').value) || 1;
+      
+      if (!productoId) return;
+
+      const producto = productosDisponibles.find(p => p.id === productoId);
+      if (!producto) return;
+
+      const subtotal = parseFloat(producto.precio) * cantidad;
+      document.getElementById('infoProdSubtotal').textContent = subtotal.toFixed(2);
+    }
+
     async function cargarDetallesVenta() {
       try {
-        // Nota: esto cargará todos los detalles; si tienes muchos, considera paginar o filtrar por venta_id
         const res = await fetch(`${API_URL}/detalleVenta`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -448,7 +528,7 @@
       } catch (err) {
         console.error(err);
         Swal.fire('Error', 'No se pudieron cargar los detalles de venta', 'error');
-        document.getElementById('detalleVentaTable').innerHTML = '<tr><td colspan="6" class="text-danger">Error al cargar</td></tr>';
+        document.getElementById('detalleVentaTable').innerHTML = '<tr><td colspan="8" class="text-danger">Error al cargar</td></tr>';
       }
     }
 
@@ -456,39 +536,58 @@
       const table = document.getElementById('detalleVentaTable');
       
       if (!Array.isArray(detalles) || detalles.length === 0) {
-        table.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No hay detalles de venta</td></tr>';
+        table.innerHTML = '<tr><td colspan="8" class="text-center text-muted">No hay detalles de venta</td></tr>';
         return;
       }
 
-      table.innerHTML = detalles.map(d => `
-        <tr>
-          <td>${d.id}</td>
-          <td>${d.venta_id}</td>
-          <td>${d.producto_id}</td>
-          <td>${d.cantidad}</td>
-          <td>$${parseFloat(d.precio_unitario).toFixed(2)}</td>
-          <td>
-            <div class="action-buttons d-flex">
-              <button class="btn btn-sm btn-warning" onclick="abrirEditDet(${d.id}, ${d.cantidad}, ${d.precio_unitario})">
-                <i class="bi bi-pencil"></i> Editar
-              </button>
-              <button class="btn btn-sm btn-danger" onclick="eliminarDetalleVenta(${d.id})">
-                <i class="bi bi-trash"></i> Eliminar
-              </button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
+      table.innerHTML = detalles.map(d => {
+        const producto = productosDisponibles.find(p => p.id === d.producto_id);
+        const subtotal = parseFloat(d.precio_unitario) * d.cantidad;
+        
+        return `
+          <tr>
+            <td><strong>${d.id}</strong></td>
+            <td>${d.venta_id}</td>
+            <td>${producto ? producto.nombre : `Producto #${d.producto_id}`}</td>
+            <td class="text-muted small">${producto ? producto.descripcion : 'N/A'}</td>
+            <td class="text-center"><badge class="badge bg-info">${d.cantidad}</badge></td>
+            <td>$${parseFloat(d.precio_unitario).toFixed(2)}</td>
+            <td><strong>$${subtotal.toFixed(2)}</strong></td>
+            <td>
+              <div class="action-buttons d-flex" style="gap: 5px;">
+                <button class="btn btn-sm btn-warning" onclick="abrirEditDet(${d.id}, ${d.cantidad}, ${d.precio_unitario})">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" onclick="eliminarDetalleVenta(${d.id})">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
 
     async function guardarDetalleVenta() {
       const venta_id = parseInt(document.getElementById('detVentaId').value);
-      const producto_id = parseInt(document.getElementById('detProductoId').value);
+      const producto_id = parseInt(document.getElementById('detProductoSelect').value);
       const cantidad = parseInt(document.getElementById('detCantidad').value);
-      const precio_unitario = parseFloat(document.getElementById('detPrecioUnitario').value);
+      
+      const producto = productosDisponibles.find(p => p.id === producto_id);
+      if (!producto) {
+        Swal.fire('Error', 'Selecciona un producto válido', 'warning');
+        return;
+      }
+
+      const precio_unitario = parseFloat(producto.precio);
 
       if (isNaN(venta_id) || isNaN(producto_id) || isNaN(cantidad) || isNaN(precio_unitario)) {
         Swal.fire('Error', 'Completa todos los campos correctamente', 'warning');
+        return;
+      }
+
+      if (cantidad > producto.stock) {
+        Swal.fire('Error', `No hay suficiente stock. Disponible: ${producto.stock}`, 'warning');
         return;
       }
 
@@ -507,11 +606,11 @@
           throw new Error(err.message || 'Error al crear');
         }
 
-        Swal.fire('Éxito', 'Detalle de venta creado', 'success');
+        Swal.fire('Éxito', `${producto.nombre} agregado a la venta`, 'success');
         document.getElementById('detVentaId').value = '';
-        document.getElementById('detProductoId').value = '';
-        document.getElementById('detCantidad').value = '';
-        document.getElementById('detPrecioUnitario').value = '';
+        document.getElementById('detProductoSelect').value = '';
+        document.getElementById('detCantidad').value = '1';
+        document.getElementById('productoInfoDiv').style.display = 'none';
         cargarDetallesVenta();
       } catch (err) {
         Swal.fire('Error', err.message, 'error');
