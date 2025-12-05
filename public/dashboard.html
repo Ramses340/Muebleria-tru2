@@ -15,33 +15,181 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
-    body {
-      background-color: #f8f9fa;
-    }
-    .navbar {
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .section {
-      display: none;
-    }
-    .section.active {
-      display: block;
-    }
-    .card {
-      margin-bottom: 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    .table-responsive {
-      margin-top: 20px;
-    }
-    .action-buttons {
-      gap: 5px;
-    }
-    .btn-sm {
-      padding: 0.3rem 0.6rem;
-      font-size: 0.85rem;
-    }
-  </style>
+  /* ===== PALETA DARK BLUE ELEGANTE ===== */
+:root {
+  --azul-oscuro: #0D1B2A;
+  --azul-panel: #1B263B;
+  --azul-card: #27344D;
+  --azul-acento: #3282B8;
+  --azul-hover: #4A9FD8;
+  --azul-claro: #BBE1FA;
+
+  --gris-claro: #D0D0D0;
+  --blanco: #F5F5F5;
+}
+/* === INPUTS CON TEXTO Y PLACEHOLDER BLANCO === */
+
+.form-control,
+.form-select {
+  background-color: #ffffff !important; /* fondo blanco */
+  color: #000000 !important;            /* texto negro para que se lea */
+  border: 1px solid #2c3e50;
+  border-radius: 6px;
+}
+
+/* ===== BASE ===== */
+body {
+  background-color: var(--azul-oscuro);
+  color: var(--blanco);
+  font-family: Arial, sans-serif;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  background-color: var(--azul-panel) !important;
+  border-bottom: 1px solid #223047;
+}
+
+.navbar-nav .nav-link {
+  color: var(--gris-claro) !important;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--azul-claro) !important;
+}
+
+/* ===== SIDEBAR ===== */
+.list-group-item {
+  background-color: var(--azul-panel);
+  border: 1px solid #223047;
+  color: var(--blanco);
+}
+
+.list-group-item.active {
+  background-color: var(--azul-acento);
+  border-color: var(--azul-acento);
+}
+
+/* ===== CARDS ===== */
+.card {
+  background-color: var(--azul-card);
+  color: var(--blanco);
+  border: 1px solid #1f2c3d;
+}
+
+.card-header {
+  background-color: var(--azul-panel);
+  border-bottom: 1px solid #223047;
+}
+
+/* ===== TABLAS ===== */
+
+/* Fondo general y bordes un poco redondeados */
+table.table {
+  background-color: #2E3F5F !important; /* Azul un poco más claro */
+  color: var(--blanco) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  border: 1px solid #1f2c3d !important;
+}
+
+/* Cabecera */
+thead.table-dark th {
+  background-color: #3B4F72 !important; /* Azul intermedio */
+  color: var(--azul-claro) !important;
+  border-color: #4B5E86 !important;
+}
+
+/* Filas */
+tbody tr {
+  background-color: #2E3F5F !important;
+  transition: background-color 0.25s ease;
+}
+
+/* Hover */
+tbody tr:hover {
+  background-color: #4467A3 !important; /* Azul brillante */
+  color: var(--blanco) !important;
+}
+
+/* Bordes y paddings */
+.table td,
+.table th {
+  border-color: #1f2c3d !important;
+  padding: 10px !important;
+}
+
+
+/* ===== BOTONES ===== */
+.btn-primary {
+  background-color: var(--azul-acento);
+  border-color: var(--azul-acento);
+}
+
+.btn-primary:hover {
+  background-color: var(--azul-hover);
+  border-color: var(--azul-hover);
+}
+
+.btn-danger {
+  background-color: #C62828;
+  border-color: #C62828;
+}
+
+.btn-danger:hover {
+  background-color: #E53935;
+  border-color: #E53935;
+}
+
+.btn-secondary {
+  background-color: var(--azul-panel);
+  border-color: var(--azul-panel);
+  color: var(--gris-claro);
+}
+
+.btn-secondary:hover {
+  background-color: var(--azul-card);
+}
+
+/* ===== INPUTS ===== */
+.form-control,
+.form-select {
+  background-color: var(--azul-card);
+  color: var(--blanco);
+  border: 1px solid #1f2c3d;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--azul-card);
+  color: var(--blanco);
+  border-color: var(--azul-acento);
+  box-shadow: 0 0 0 0.2rem rgba(50, 130, 184, 0.25);
+}
+
+/* ===== MODAL ===== */
+.modal-content {
+  background-color: var(--azul-panel);
+  color: var(--blanco);
+  border: 1px solid #223047;
+}
+
+.modal-header,
+.modal-footer {
+  border-color: #223047;
+}
+
+/* ===== ICONOS ===== */
+i {
+  color: var(--azul-claro);
+}
+
+i:hover {
+  color: var(--azul-hover);
+}
+
+</style>
+
 </head>
 
 <body>

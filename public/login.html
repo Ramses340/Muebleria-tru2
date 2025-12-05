@@ -15,32 +15,100 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
-    .eye-btn {
-      cursor: pointer;
-      transition: transform 0.2s ease, opacity 0.2s ease;
+    /* === PALETA === */
+    :root {
+      --bg-dark: #0d1117;
+      --card-blue: #162238;
+      --border-blue: #1e3050;
+      --blue-primary: #1f4ea3;
+      --blue-hover: #275fcc;
+      --light-gray: #d7d7d7;
+      --text-white: #ffffff;
     }
-    .eye-btn:hover {
-      transform: scale(1.2);
-      opacity: 0.7;
+
+    /* === FONDO GENERAL === */
+    body {
+      background-color: var(--bg-dark) !important;
+      color: var(--text-white);
+    }
+
+    /* === TARJETA === */
+    .login-card {
+      background: var(--card-blue);
+      border: 1px solid var(--border-blue);
+      border-radius: 12px;
+      color: var(--text-white);
+    }
+
+    /* === TÍTULO === */
+    .login-card h3 {
+      color: var(--text-white);
+      font-weight: 600;
+    }
+
+    /* === INPUTS === */
+    .form-control {
+      background-color: #ffffff !important;
+      color: #000 !important;
+      border-radius: 8px;
+      border: 1px solid var(--border-blue);
+    }
+
+    .form-control::placeholder {
+      color: #6f6f6f !important;
+    }
+
+    /* === INPUT GROUP (icono del ojo) === */
+    .input-group-text {
+      background-color: #ffffff !important;
+      border: 1px solid var(--border-blue);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .eye-btn i {
+      color: #000 !important;
+    }
+
+    /* === BOTÓN === */
+    .btn-primary {
+      background-color: var(--blue-primary);
+      border: none;
+      font-weight: 600;
+      border-radius: 8px;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--blue-hover);
+    }
+
+    /* === LINK CREAR CUENTA === */
+    a {
+      color: #69a8ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 
-<body class="bg-light d-flex align-items-center justify-content-center vh-100">
+<body class="d-flex align-items-center justify-content-center vh-100">
 
-  <div class="card shadow-sm p-4" style="max-width:420px; width:100%;">
+  <div class="login-card shadow p-4" style="max-width:420px; width:100%;">
     <h3 class="text-center mb-3">Iniciar Sesión</h3>
 
     <form id="loginForm" novalidate>
       <div class="mb-3">
         <label class="form-label">Email</label>
-        <input id="email" class="form-control" type="email" required>
+        <input id="email" class="form-control" type="email" placeholder="Ingresa tu email" required>
       </div>
 
       <div class="mb-3">
         <label class="form-label">Contraseña</label>
         <div class="input-group">
-          <input id="password" class="form-control" type="password" required>
+          <input id="password" class="form-control" type="password" placeholder="Ingresa tu contraseña" required>
           <span class="input-group-text eye-btn" onclick="togglePassword()">
             <i class="bi bi-eye" id="iconPassword"></i>
           </span>
@@ -98,7 +166,6 @@
         const data = await res.json();
 
         if (!res.ok) {
-          // Manejar errores de validación (express-validator)
           let errorMsg = data.message || "Error en el login";
           if (data.errors && Array.isArray(data.errors)) {
             errorMsg = data.errors.map(e => e.msg).join(", ");

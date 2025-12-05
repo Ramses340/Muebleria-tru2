@@ -14,6 +14,91 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
+        /* === PALETA === */
+        :root {
+            --bg-dark: #0d1117;
+            --card-blue: #162238;
+            --border-blue: #1e3050;
+            --blue-primary: #1f4ea3;
+            --blue-hover: #275fcc;
+            --light-gray: #d7d7d7;
+            --text-white: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-dark) !important;
+            color: var(--text-white);
+        }
+
+        /* === TARJETA === */
+        .reg-card {
+            background: var(--card-blue);
+            border: 1px solid var(--border-blue);
+            border-radius: 12px;
+            width: 400px;
+            color: var(--text-white);
+        }
+
+        h3 {
+            color: var(--text-white);
+            font-weight: 600;
+        }
+
+        /* === INPUTS === */
+        .form-control {
+            background-color: #ffffff !important;
+            color: #000 !important;
+            border-radius: 8px;
+            border: 1px solid var(--border-blue);
+        }
+
+        .form-control::placeholder {
+            color: #6f6f6f !important;
+        }
+
+        /* === INPUT GROUP === */
+        .input-group-text {
+            background-color: #ffffff !important;
+            border: 1px solid var(--border-blue);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .eye-btn i {
+            color: #000 !important;
+        }
+
+        /* === BOTÓN === */
+        .btn-primary {
+            background-color: var(--blue-primary);
+            border: none;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--blue-hover);
+        }
+
+        /* === LINK === */
+        a {
+            color: #69a8ff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* === BARRA DE FUERZA === */
+        #strengthBar {
+            height: 6px;
+            border-radius: 4px;
+            margin-top: 6px;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+
+        /* === OJO === */
         .eye-btn {
             cursor: pointer;
             transition: transform 0.2s ease, opacity 0.2s ease;
@@ -22,36 +107,29 @@
             transform: scale(1.2);
             opacity: 0.7;
         }
-
-        #strengthBar {
-            height: 6px;
-            border-radius: 4px;
-            margin-top: 6px;
-            transition: width 0.3s ease, background 0.3s ease;
-        }
     </style>
 </head>
 
-<body class="bg-light d-flex justify-content-center align-items-center" style="height:100vh;">
+<body class="d-flex justify-content-center align-items-center" style="height:100vh;">
 
-<div class="card shadow p-4" style="width: 400px;">
+<div class="reg-card shadow p-4">
     <h3 class="text-center mb-3">Crear cuenta</h3>
 
     <form id="formRegistro" novalidate>
         <div class="mb-3">
             <label class="form-label">Nombre</label>
-            <input type="text" id="nombre" class="form-control" required>
+            <input type="text" id="nombre" class="form-control" placeholder="Tu nombre" required>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Correo</label>
-            <input type="email" id="email" class="form-control" required>
+            <input type="email" id="email" class="form-control" placeholder="correo@example.com" required>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Contraseña</label>
             <div class="input-group">
-                <input type="password" id="password" class="form-control" required oninput="checkStrength()">
+                <input type="password" id="password" class="form-control" placeholder="Mínimo 8 caracteres" required oninput="checkStrength()">
                 <span class="input-group-text eye-btn" onclick="togglePasswordReg()">
                     <i class="bi bi-eye" id="iconPasswordReg"></i>
                 </span>
@@ -152,12 +230,11 @@ document.getElementById("formRegistro").addEventListener("submit", async (e) => 
                 window.location.href = "/login.html";
             });
         } else {
-          // Manejar errores de validación (express-validator)
-          let errorMsg = data.message || "No se pudo registrar";
-          if (data.errors && Array.isArray(data.errors)) {
-            errorMsg = data.errors.map(e => e.msg).join(", ");
-          }
-          Swal.fire("Error", errorMsg, "error");
+            let errorMsg = data.message || "No se pudo registrar";
+            if (data.errors && Array.isArray(data.errors)) {
+                errorMsg = data.errors.map(e => e.msg).join(", ");
+            }
+            Swal.fire("Error", errorMsg, "error");
         }
 
     } catch (error) {
