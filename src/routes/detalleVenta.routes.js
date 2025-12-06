@@ -7,10 +7,8 @@ const auth = require('../middlewares/auth.middleware'); // proteger si necesario
 
 router.post('/',
   auth.protect,
-  body('venta_id').isInt(),
   body('producto_id').isInt(),
   body('cantidad').isInt({ gt: 0 }),
-  body('precio_unitario').isFloat({ gt: 0 }),
   validate,
   ctrl.create
 );
