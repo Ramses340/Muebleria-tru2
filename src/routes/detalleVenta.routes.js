@@ -3,7 +3,7 @@ const router = express.Router();
 const ctrl = require('../controllers/detalleVenta.controller');
 const { body, param } = require('express-validator');
 const validate = require('../middlewares/validate.middleware');
-const auth = require('../middlewares/auth.middleware'); // proteger si necesario
+const auth = require('../middlewares/auth.middleware'); // proteger 
 
 router.post('/',
   auth.protect,

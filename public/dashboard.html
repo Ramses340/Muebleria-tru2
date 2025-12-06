@@ -15,6 +15,7 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
+    
   /* ===== PALETA DARK BLUE ELEGANTE ===== */
 :root {
   --azul-oscuro: #0D1B2A;
@@ -28,6 +29,14 @@
   --blanco: #F5F5F5;
 }
 /* === INPUTS CON TEXTO Y PLACEHOLDER BLANCO === */
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
 
 .form-control,
 .form-select {
@@ -466,13 +475,20 @@ i:hover {
     });
 
     // Cambiar sección
-    function showSection(sectionId) {
-      document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-      document.getElementById(sectionId).classList.add('active');
-      
-      document.querySelectorAll('.list-group-item').forEach(el => el.classList.remove('active'));
-      event.target.classList.add('active');
-    }
+    function showSection(sectionId, event) {
+  // Ocultar todas las secciones
+  document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+
+  // Mostrar solo la sección seleccionada
+  document.getElementById(sectionId).classList.add('active');
+
+  // Quitar el active de todos los botones del sidebar
+  document.querySelectorAll('.list-group-item').forEach(el => el.classList.remove('active'));
+
+  // Activar el botón que se presionó
+  event.currentTarget.classList.add('active');
+}
+
 
     // ============ PRODUCTOS ============
 
