@@ -26,7 +26,24 @@ app.use('/api/detalleVenta', detalleVentaRoutes);
 
 /* Página principal */
 app.get('/', (req, res) => {
-  res.sendFile(path.join(publicPath, 'login.html'));
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+/* Rutas que redirigen a index.html para que el router maneje */
+app.get('/login.html', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+app.get('/register.html', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+app.get('/productos.html', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
+
+app.get('/ventas.html', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 /* 404 */
